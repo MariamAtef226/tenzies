@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
+// functions to format time difference for score display
 function formatTimeDifference(difference) {
-  difference = difference/1000;
+  difference = Math.round(difference / 1000);
   const seconds = difference % 60;
   difference = Math.floor(difference / 60);
   const minutes = difference % 60;
@@ -48,21 +49,16 @@ function App() {
     return temp;
   });
 
-  // checks endGame
+  // checks endGame (winning)
   useEffect(() => {
-    let res = values.filter((v) => v.isHeld == false);
-    if (res.length == 0) {
-      let res2 = values.filter((v) => {
-        return v.value != values[0].value;
-      });
-      if (res2.length == 0) {
-        setEndGame(true);
-        let d = new Date();
-        setEndTime(d.getTime());
-
-      } else {
-        alert("Make Sure you hold 10 similar numbers!");
-      }
+    let unheld = values.filter((v) => v.isHeld == false); // checks if any is unheld
+    let unequal = values.filter((v) => v.value != values[0].value); // check if a held dice isn't equal to the rest
+    if (unheld.length == 0 && unequal.length == 0) {
+      setEndGame(true);
+      let d = new Date();
+      setEndTime(d.getTime()); // store game's endTime
+    } else if (unheld.length == 0 && unequal.length !== 0) {
+      alert("Make Sure you hold 10 similar numbers!");
     }
   }, [values]);
 
@@ -130,19 +126,14 @@ function App() {
             );
           })}
           {endGame && (
-            <div className="winner">
-              <div className="winner-inner">
-                <h1> You won!</h1>
-                <div className="text-light">
-                  <span className="text-warning">Number of Rolls:</span>{" "}
-                  {rollsCount}
-                </div>
-                <div className="text-light">
-                  <span className="text-warning">Time Taken:</span>{" "}
-                  {formatTimeDifference(endTime - startTime)}
-                </div>
-              </div>
-            </div>
+            <>
+              <Winner
+              endTime={endTime}
+              startTime={startTime}
+              rollsCount={rollsCount}
+              formatTimeDifference = {formatTimeDifference}
+            />
+            </>
           )}
         </div>
 
