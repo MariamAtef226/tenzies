@@ -105,7 +105,7 @@ body {
   }
   .container {
     grid-template-columns: auto auto;
-    height: 670px;
+    height: 650px;
     margin-top:40px;
 
   }
