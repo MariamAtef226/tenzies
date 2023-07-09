@@ -1,9 +1,14 @@
 import "./App.css";
 import Die from "./components/Die";
 import { useState, useEffect } from "react";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 function App() {
+  const { width, height } = useWindowSize(); // used for confetti effect
+
   let [endGame, setEndGame] = useState(false);
+
   let [values, setValues] = useState(() => {
     let temp = [];
     for (let i = 0; i < 10; i++)
@@ -14,11 +19,22 @@ function App() {
     return temp;
   });
 
+  // checks endGame
   useEffect(() => {
     let res = values.filter((v) => v.isHeld == false);
-    if (res.length == 0) setEndGame(true);
+    if (res.length == 0) {
+      let res2 = values.filter((v) => {
+        return v.value != values[0].value;
+      });
+      if (res2.length == 0) {
+        setEndGame(true);
+      } else {
+        alert("Make Sure you hold 10 similar numbers!");
+      }
+    }
   }, [values]);
 
+  // roll dices
   function roll() {
     if (!endGame) {
       let temp = [];
@@ -34,18 +50,21 @@ function App() {
     }
   }
 
+  // toggle state of a dice
   function toggle(index) {
-    if (!endGame){
-    setValues((prev) =>
-      prev.map((v, i) => {
-        return index == i ? { ...v, isHeld: !v.isHeld } : { ...v };
-      })
-    );
+    if (!endGame) {
+      setValues((prev) =>
+        prev.map((v, i) => {
+          return index == i ? { ...v, isHeld: !v.isHeld } : { ...v };
+        })
+      );
     }
   }
-  function startAgain(){
+
+  // play again handler
+  function startAgain() {
     setEndGame(false);
-    
+
     let temp = [];
     for (let i = 0; i < 10; i++)
       temp.push({
@@ -53,7 +72,6 @@ function App() {
         isHeld: false,
       });
     setValues(temp);
-
   }
 
   return (
@@ -76,18 +94,29 @@ function App() {
               />
             );
           })}
+          {endGame && (
+            <div className="winner">
+              <h1> You won!</h1>
+            </div>
+          )}
         </div>
 
-        <button onClick={roll} className="btn-primary btn text-light">
-          Roll
+        <button
+          onClick={!endGame ? roll : startAgain}
+          className="btn-primary btn text-light"
+        >
+          {!endGame ? "Roll" : "Start Again"}
         </button>
 
-        {endGame && <button onClick={startAgain} className="btn-primary btn start-again text-light">
-          Start Again
-        </button>}
-        {endGame && <div onClick={startAgain} className="instructions text-light mb-4 fs-2">
-          Congrats! You Won!
-        </div>}
+        
+        {endGame && (
+          <div
+            onClick={startAgain}
+            className="instructions text-light mb-4 fs-2"
+          >
+            <Confetti width={width} height={height} />
+          </div>
+        )}
       </main>
     </>
   );
