@@ -1,7 +1,7 @@
 # tenzies 🎲
 
 ### Project Description :page_facing_up:
-A dynamic interactive webgame using React.js. The project is a part of Bob Ziroll's 'Learn React' course on Scrimba. I've built the code on my own from scratch before watching the videos, then used the videos as a reference for rating my work. Also, I've added extra features such as high score tracking, counting number of rolls per game and determine duration of game. The game isn't fully tested yet. Responsivness adjustments are still under progress.
+A dynamic interactive webgame using React.js. The project is a part of Bob Ziroll's 'Learn React' course on Scrimba. I've built the code on my own from scratch before watching the videos, then used the videos as a reference for rating my work. Also, I've added extra features such as high score tracking, counting number of rolls per game and determine duration of game.
 
 
 ### Used Technology 💻
