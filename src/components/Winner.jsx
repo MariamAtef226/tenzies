@@ -14,7 +14,7 @@ export default function Winner(props){
           </div>
           <div className="text-light">
             <span className="text-warning">Your Highest Score:</span>{" "}
-            {props.bestRolls.rolls} Rolls <span className="text-warning">in a time of </span> {props.bestRolls.time}
+            {props.bestRolls.rolls} Rolls
           </div>
 
 
