@@ -23,13 +23,15 @@ function roll(){
 
 function toggle(index){
   setValues((prev)=>prev.map((v,i)=>{ return index == i ? {...v, isHeld:!v.isHeld}: {...v} }));
-    
+
 }
 
 
   return (
     <>
       <main className='text-center'>
+      <h1 className="title text-light">Tenzies</h1>
+            <p className="instructions text-light">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
         <div className="container">
           {values.map((v, index) => {
             return <Die value={v.value} index={index} key={index} clickHandler={toggle}  held={v.isHeld}/>;
