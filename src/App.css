@@ -62,6 +62,9 @@ body {
 .winner h1{
   font-size: 4em;
 }
+.winner-inner div{
+  font-size: 1.3em;
+}
 
 
 .btn{

@@ -12,6 +12,18 @@ export default function Winner(props){
             <span className="text-warning">Time Taken:</span>{" "}
             {props.formatTimeDifference(props.endTime - props.startTime)}
           </div>
+          <div className="text-light">
+            <span className="text-warning">Your Highest Score:</span>{" "}
+            {props.bestRolls.rolls} Rolls <span className="text-warning">in a time of </span> {props.bestRolls.time}
+          </div>
+
+
+          { props.rollsCount <= props.bestRolls.rolls && 
+                    <div className="text-primary">
+                    Congrats! You Broke your highest score of rolls!
+                  </div>
+        }
+
         </div>
       </div>    )
 }

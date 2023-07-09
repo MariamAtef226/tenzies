@@ -49,6 +49,15 @@ function App() {
     return temp;
   });
 
+  let [bestRolls, setBestRolls] = useState(JSON.parse(localStorage.getItem('bestRolls')) || {rolls:10000000,time:0});
+
+  useEffect(()=>{
+    console.log(JSON.parse(localStorage.getItem('bestRolls')))
+    console.log(bestRolls);
+    // localStorage.setItem('bestRolls',JSON.stringify({rolls:10000000,time:0}))
+
+  })
+
   // checks endGame (winning)
   useEffect(() => {
     let unheld = values.filter((v) => v.isHeld == false); // checks if any is unheld
@@ -57,6 +66,13 @@ function App() {
       setEndGame(true);
       let d = new Date();
       setEndTime(d.getTime()); // store game's endTime
+      if (rollsCount <= bestRolls.rolls){
+        let d = formatTimeDifference(endTime-startTime)
+        localStorage.setItem('bestRolls',JSON.stringify({rolls:rollsCount,time:d}))
+        setBestRolls({rolls:rollsCount,time:d});
+        
+      }
+
     } else if (unheld.length == 0 && unequal.length !== 0) {
       alert("Make Sure you hold 10 similar numbers!");
     }
@@ -131,6 +147,7 @@ function App() {
               endTime={endTime}
               startTime={startTime}
               rollsCount={rollsCount}
+              bestRolls = {bestRolls}
               formatTimeDifference = {formatTimeDifference}
             />
             </>
