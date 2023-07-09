@@ -1,13 +1,42 @@
 import "./App.css";
 import Die from "./components/Die";
+import Winner from "./components/Winner";
 import { useState, useEffect } from "react";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
+function formatTimeDifference(difference) {
+  difference = difference/1000;
+  const seconds = difference % 60;
+  difference = Math.floor(difference / 60);
+  const minutes = difference % 60;
+  difference = Math.floor(difference / 60);
+  const hours = difference % 24;
+
+  return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+}
+
+function padZero(value, length = 2) {
+  value = value.toString();
+  while (value.length < length) {
+    value = "0" + value;
+  }
+  return value;
+}
+
 function App() {
   const { width, height } = useWindowSize(); // used for confetti effect
 
-  let [endGame, setEndGame] = useState(false);
+  let [rollsCount, setRollsCount] = useState(0); // counting the rolls you've made in the current game
+
+  let [startTime, setStartTime] = useState(() => {
+    let d = new Date();
+    return d.getTime();
+  }); // store start time
+
+  let [endTime, setEndTime] = useState(0); // counting the rolls you've made in the current game
+
+  let [endGame, setEndGame] = useState(false); // determines games winning
 
   let [values, setValues] = useState(() => {
     let temp = [];
@@ -28,6 +57,9 @@ function App() {
       });
       if (res2.length == 0) {
         setEndGame(true);
+        let d = new Date();
+        setEndTime(d.getTime());
+
       } else {
         alert("Make Sure you hold 10 similar numbers!");
       }
@@ -47,6 +79,8 @@ function App() {
         else temp.push(values[i]);
         setValues(temp);
       }
+
+      setRollsCount((prev) => prev + 1);
     }
   }
 
@@ -72,6 +106,7 @@ function App() {
         isHeld: false,
       });
     setValues(temp);
+    setRollsCount(0);
   }
 
   return (
@@ -96,7 +131,17 @@ function App() {
           })}
           {endGame && (
             <div className="winner">
-              <h1> You won!</h1>
+              <div className="winner-inner">
+                <h1> You won!</h1>
+                <div className="text-light">
+                  <span className="text-warning">Number of Rolls:</span>{" "}
+                  {rollsCount}
+                </div>
+                <div className="text-light">
+                  <span className="text-warning">Time Taken:</span>{" "}
+                  {formatTimeDifference(endTime - startTime)}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -108,7 +153,6 @@ function App() {
           {!endGame ? "Roll" : "Start Again"}
         </button>
 
-        
         {endGame && (
           <div
             onClick={startAgain}
